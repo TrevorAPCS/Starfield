@@ -1,6 +1,6 @@
 Particle[] particles;
 Particle[] thrusters;
-int dpX = 250;
+int dpX = 450;
 int dpY = 400;
 int pX = dpX;
 int pY = dpY;
@@ -17,6 +17,8 @@ Button easy;
 Button medium;
 Button hard;
 Button start;
+Button leftB;
+Button rightB;
 int stars = 100;
 int asteroids = 5;
 int powerUps = 2;
@@ -27,34 +29,36 @@ int score;
 int sT = 0;
 
 void setup(){
-  size(500, 500);
-  easy = new Button(90, 350, 65, 50, "Easy");
-  medium = new Button(160, 350, 65, 50, "Medium");
-  hard = new Button(230, 350, 65, 50, "Hard");
-  start = new Button(300, 350, 110, 50, "Start");
+  size(900, 500);
+  easy = new Button(290, 350, 65, 50, "Easy");
+  medium = new Button(360, 350, 65, 50, "Medium");
+  hard = new Button(430, 350, 65, 50, "Hard");
+  start = new Button(500, 350, 110, 50, "Start");
+  leftB = new Button(0, 0, 200, 500, "Left");
+  rightB = new Button(700, 0, 200, 500, "Right");
 }
 void draw(){
   background(0);
   if(menu){
     fill(150);
-    rect(50, 50, 400, 400);
+    rect(250, 50, 400, 400);
     fill(0);
     textSize(35);
     textAlign(CENTER);
-    text("Dodge the Asteroids!", 250, 100);
+    text("Dodge the Asteroids!", 450, 100);
     if(difficulty == 1){
-      text("Difficulty: Easy", 250, 300);
+      text("Difficulty: Easy", 450, 300);
     }
     else if(difficulty == 2){
-      text("Difficulty: Medium", 250, 300);
+      text("Difficulty: Medium", 450, 300);
     }
     else if(difficulty == 3){
-      text("Difficulty: Hard", 250, 300);
+      text("Difficulty: Hard", 450, 300);
     }
     textSize(15);
-    text("Easy High score: " + eHScore, 250, 175);
-    text("Medium High score: " + mHScore, 250, 210);
-    text("Hard High score: " + hHScore, 250, 245);
+    text("Easy High score: " + eHScore, 450, 175);
+    text("Medium High score: " + mHScore, 450, 210);
+    text("Hard High score: " + hHScore, 450, 245);
     easy.show();
     medium.show();
     hard.show();
@@ -73,17 +77,19 @@ void draw(){
     }
   }
   else{
+    leftB.show();
+    rightB.show();
     for(int i = 0; i < particles.length; i++){
       particles[i].move();
       particles[i].show();
-      if(particles[i].x > 530 || particles[i].x < -30 || particles[i].y > 530 || particles[i].y < -30){
-        particles[i].reInitialize(250, 150);
+      if(particles[i].x > 730 || particles[i].x < 170 || particles[i].y > 530 || particles[i].y < -30){
+        particles[i].reInitialize(450, 150);
       }
     }
-    if(left && dpX > 30){
+    if(left && dpX > 230){
       dpX -= 5;
     }
-    if(right && dpX < 470){
+    if(right && dpX < 670){
       dpX += 5;
     }
     pX = dpX + (int)(Math.random()*3) - 1;
@@ -92,9 +98,9 @@ void draw(){
     drawShip(pX, pY);
     checkCollision();
     fill(150);
-    rect(0, 0, sHealth, 20);
+    rect(200, 0, sHealth, 20);
     fill(0, 255, 0);
-    rect(0, 0, health, 20);
+    rect(200, 0, health, 20);
     if(health == 0){
       if(difficulty == 1){
         if(score > eHScore){
@@ -116,8 +122,8 @@ void draw(){
     for(int i = 0; i < thrusters.length; i++){
       thrusters[i].move();
       thrusters[i].show();
-      if((thrusters[i].x > 530 || thrusters[i].x < -30 || thrusters[i].y > 530 || thrusters[i].y < -30)){
-        thrusters[i].reInitialize(thrusters[i].originalX + pX - 250, thrusters[i].originalY, (Math.random() * 2 + 1) * PI / 4, (Math.random() * 20) + 5);
+      if((thrusters[i].x > 730 || thrusters[i].x < 170 || thrusters[i].y > 530 || thrusters[i].y < -30)){
+        thrusters[i].reInitialize(thrusters[i].originalX + pX - 450, thrusters[i].originalY, (Math.random() * 2 + 1) * PI / 4, (Math.random() * 20) + 5);
         if(health < 50){
           thrusters[i].myOpacity = 500;
           thrusters[i].myColor = 50;
@@ -127,9 +133,9 @@ void draw(){
     if(shieldTimer > 0){
       shieldTimer--;
       fill(150);
-      rect(400, 0, 100, 25);
+      rect(600, 0, 100, 25);
       fill(0, 0, 255);
-      rect(400, 0, shieldTimer / 5, 25);
+      rect(600, 0, shieldTimer / 5, 25);
     }
     if((int)(millis()/100) > sT){
       score++;
@@ -137,7 +143,7 @@ void draw(){
     }
     fill(255);
     textAlign(CENTER);
-    text("Score: " + score, 255, 10);
+    text("Score: " + score, 450, 10);
   }
 }
 void keyPressed(){
@@ -165,7 +171,7 @@ void checkCollision(){
             fill(100, 0, 0);
             health -= 10;
           }
-          particles[i].reInitialize(250, 150);
+          particles[i].reInitialize(450, 150);
         }
       }
     }
@@ -174,7 +180,7 @@ void checkCollision(){
         if(particles[i].crashable){
           if(((PowerUp)particles[i]).type == 0){
             shieldTimer = 500;
-            particles[i].reInitialize(250, 150);
+            particles[i].reInitialize(450, 150);
           }
           if(((PowerUp)particles[i]).type == 1){
             if(health < sHealth - 20){
@@ -183,7 +189,7 @@ void checkCollision(){
             else{
               health = sHealth;
             }
-            particles[i].reInitialize(250, 150);
+            particles[i].reInitialize(450, 150);
           }
         }
       }
@@ -210,6 +216,18 @@ void mousePressed(){
       menu = false;
     }
   }
+  else{
+    if(leftB.checkClick()){
+      left = true;
+    }
+    if(rightB.checkClick()){
+      right = true;
+    }
+  }
+}
+void mouseReleased(){
+  left = false;
+  right = false;
 }
 void drawShip(int pX, int pY){
   stroke(150);
@@ -264,19 +282,19 @@ void initializeArrays(){
   particles = new Particle[asteroids + stars + powerUps];
   thrusters = new Particle[50];
   for(int i = 0; i < stars; i++){
-    particles[i] = new Particle(250, 150, (Math.random() * 5) + 3, Math.random() * 2 * Math.PI, (Math.random() * 4) + 1);
+    particles[i] = new Particle(450, 150, (Math.random() * 5) + 3, Math.random() * 2 * Math.PI, (Math.random() * 4) + 1);
   }
   for(int i = stars; i < stars + asteroids; i++){
-    particles[i] = new Asteroid(250, 150, (Math.random() * 5) + 3, ((Math.random() * 2 + 1) * PI) / 4, (Math.random() * 3) + 1);
+    particles[i] = new Asteroid(450, 150, (Math.random() * 5) + 3, ((Math.random() * 2 + 1) * PI) / 4, (Math.random() * 3) + 1);
   }
   for(int i = asteroids + stars; i < stars + asteroids + powerUps; i++){
-    particles[i] = new PowerUp(250, 150, (Math.random() * 5) + 3, ((Math.random() * 2 + 1) * PI) / 4, (Math.random() * 3) + 1);
+    particles[i] = new PowerUp(450, 150, (Math.random() * 5) + 3, ((Math.random() * 2 + 1) * PI) / 4, (Math.random() * 3) + 1);
   }
   for(int i = 0; i < thrusters.length / 2; i++){
-    thrusters[i] = new Particle(pX - 12, pY + 10, (Math.random() * 20) + 5, (Math.random() * 2 + 1) * PI / 4, (Math.random() * 3) + 2, 150, (int)(Math.random() * 100) + 60);
+    thrusters[i] = new Particle(438, pY + 10, (Math.random() * 20) + 5, (Math.random() * 2 + 1) * PI / 4, (Math.random() * 3) + 2, 150, (int)(Math.random() * 100) + 60);
   }
   for(int i = thrusters.length/2; i < thrusters.length; i++){
-    thrusters[i] = new Particle(pX + 12, pY + 10, (Math.random() * 20) + 5, (Math.random() * 2 + 1) * PI / 4, (Math.random() * 3) + 2, 150, (int)(Math.random() * 100) + 60);
+    thrusters[i] = new Particle(462 + 12, pY + 10, (Math.random() * 20) + 5, (Math.random() * 2 + 1) * PI / 4, (Math.random() * 3) + 2, 150, (int)(Math.random() * 100) + 60);
   }
 }
 class Particle{
