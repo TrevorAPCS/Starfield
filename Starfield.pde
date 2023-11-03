@@ -52,9 +52,9 @@ void draw(){
       text("Difficulty: Hard", 250, 300);
     }
     textSize(15);
-    text("Easy High score: " + eHScore, 250, 200);
-    text("Medium High score: " + mHScore, 250, 235);
-    text("Hard High score: " + hHScore, 250, 270);
+    text("Easy High score: " + eHScore, 250, 175);
+    text("Medium High score: " + mHScore, 250, 210);
+    text("Hard High score: " + hHScore, 250, 245);
     easy.show();
     medium.show();
     hard.show();
@@ -202,7 +202,9 @@ void mousePressed(){
       difficulty = 3;
     }
     if(start.checkClick()){
+      score = 0;
       sT = (int)(millis() / 100);
+      pX = 255;
       initializeArrays();
       health = sHealth;
       menu = false;
@@ -259,20 +261,16 @@ void drawShip(int pX, int pY){
     }
 }
 void initializeArrays(){
-  System.out.println("initializing");
   particles = new Particle[asteroids + stars + powerUps];
   thrusters = new Particle[50];
   for(int i = 0; i < stars; i++){
     particles[i] = new Particle(250, 150, (Math.random() * 5) + 3, Math.random() * 2 * Math.PI, (Math.random() * 4) + 1);
-    System.out.println(i);
   }
   for(int i = stars; i < stars + asteroids; i++){
     particles[i] = new Asteroid(250, 150, (Math.random() * 5) + 3, ((Math.random() * 2 + 1) * PI) / 4, (Math.random() * 3) + 1);
-    System.out.println(i);
   }
   for(int i = asteroids + stars; i < stars + asteroids + powerUps; i++){
     particles[i] = new PowerUp(250, 150, (Math.random() * 5) + 3, ((Math.random() * 2 + 1) * PI) / 4, (Math.random() * 3) + 1);
-    System.out.println(i);
   }
   for(int i = 0; i < thrusters.length / 2; i++){
     thrusters[i] = new Particle(pX - 12, pY + 10, (Math.random() * 20) + 5, (Math.random() * 2 + 1) * PI / 4, (Math.random() * 3) + 2, 150, (int)(Math.random() * 100) + 60);
@@ -358,7 +356,6 @@ class Asteroid extends Particle{
     speed = sp;
     myColor = 100;
     crashable = true;
-    type = (int)(Math.random() * 3);
   }
   void reInitialize(int xPos, int yPos){
     x = xPos;
@@ -374,20 +371,8 @@ class Asteroid extends Particle{
     size += 0.2 * speed;
   }
   void show(){
-    fill(150);
+    fill(120);
     ellipse((float)x, (float)y, (float)size, (float)size);
-    if(type == 0){
-      fill(myColor);
-      beginShape();
-      vertex((float)x, (float)y + (float)size / 2); 
-      vertex((float)x + (float)size / 3, (float)y + (float)size / 3); 
-      //vertex((float)x, (float)y + (float)size / 2); 
-      vertex((float)x + (float)size / 2, (float)y); 
-      vertex((float)x, (float)y - (float)size / 2); 
-      vertex((float)x - (float)size / 2, (float)y); 
-      vertex((float)x, (float)y + (float)size / 2); 
-      endShape();
-    }
   }
 }
 class PowerUp extends Particle{
